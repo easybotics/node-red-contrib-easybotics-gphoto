@@ -1,0 +1,72 @@
+<script type="text/javascript">
+	RED.nodes.registerType('photo-account', 
+			{
+				category: 'config', 
+				defaults:
+				{
+					name: {value:""}
+				}, 
+				credentials: 
+				{
+					username: {type:"text"},
+					password: {type:"password"}
+				},
+
+				label: "Gphoto Account",
+			});
+</script>
+
+<script type="text/x-red" data-template-name="photo-account">
+
+ <div class="form-row">
+     <label for="node-config-input-username"><i class="icon-tag"></i> Username</label>
+     <input type="text" id="node-config-input-username">
+ </div>
+ <div class="form-row">
+     <label for="node-config-input-password"><i class="icon-tag"></i> Password</label>
+     <input type="password" id="node-config-input-password">
+ </div>
+
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('upload-photo', 
+	{
+		category: 'Google Photos', 
+		defaults:
+		{
+			name: {value:""}, 
+			fileName: {value:""},
+			albumName: {value:""},
+			account: {type:'photo-account', required:true},
+		},
+		inputs: 1, 
+		outputs: 1, 
+		icon: "arrow-in.png", 
+		label: function()
+		{
+			return this,name || "Upload Photo";
+		}
+	});
+</script>
+
+<script type="text/x-red" data-template-name="upload-photo">
+	<div class="form-row">
+		<label for="node-input-account"><i class='fa fa-tag'></i> Account </label>
+		<input type='text' id='node-input-account'/>
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-fileName"><i class='fa fa-tag'></i> File Name </label>
+		<input type='text' id='node-input-fileName'/>
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-album"><i class='fa fa-tag'></i> Album </label>
+		<input type='text' id='node-input-albumName'/>
+	</div>
+</script>
+
+
+
+
