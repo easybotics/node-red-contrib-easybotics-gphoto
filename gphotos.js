@@ -9,8 +9,8 @@ module.exports = function (RED)
 		const node = this;
 
 			
+		node.loginAttempt = false;
 		node.account = new gphoto({ username: node.credentials.username, password: node.credentials.password});
-		node.account.login( function() { node.log("logged into: " + node.credentials.username)});
 	}
 
 	function UploadPhoto (config)
@@ -24,6 +24,12 @@ module.exports = function (RED)
 
 		async function upload (fileName, albumName)
 		{
+			if(!photoAccount.account.userId && !photoAccount.loginAttempt)
+			{
+				photoAccount.loginAttempt = true;
+				await photoAccount.account.login();
+			}
+
 			const photo = await photoAccount.account.upload(fileName);
 			const album = await photoAccount.account.searchOrCreateAlbum(albumName);
 
