@@ -10,6 +10,7 @@ module.exports = function (RED)
 
 			
 		node.account = new gphoto({ username: node.credentials.username, password: node.credentials.password});
+		node.account.login( function() { node.log("logged into: " + node.credentials.username)});
 	}
 
 	function UploadPhoto (config)
@@ -23,8 +24,6 @@ module.exports = function (RED)
 
 		async function upload (fileName, albumName)
 		{
-			await photoAccount.account.login();
-			
 			const photo = await photoAccount.account.upload(fileName);
 			const album = await photoAccount.account.searchOrCreateAlbum(albumName);
 
