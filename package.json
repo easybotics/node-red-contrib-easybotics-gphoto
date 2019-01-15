@@ -1,15 +1,38 @@
 {
  "name": "node-red-contrib-easybotics-gphoto-upload",
- "version": "0.0.1",
+ "version": "0.0.2",
  "description": "node red nodes to upload photos to google photos",
+ "keywords": [
+	 "googleapi", 
+	 "google-photos", 
+	 "google photos", 
+	 "gphoto", 
+	 "photo", 
+	 "backup", 
+	 "upload", 
+	 "easybotics",
+	 "node-red"
+	 ],
  "dependencies": {
   "upload-gphotos": "^3.0.3"
  },
+ "homepage": "https://github.com/easybotics/node-red-contrib-easybotics-gphoto",
+ "bugs": "https://github.com/easybotics/node-red-contrib-easybotics-gphoto/issues",
  "main": "index.js",
  "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1"
  },
- "author": "",
+ "author": 
+ {
+	 "name": "Ben", 
+	 "email": "keptan@protonmail.com",
+	 "url": "https://github.com/keptan"
+ },
+ "repository": 
+ {
+	 "type": "git", 
+	 "url": "https://github.com/easybotics/node-red-contrib-easybotics-gphoto"
+ },
  "license": "ISC",
  "node-red": {
   "nodes": {
