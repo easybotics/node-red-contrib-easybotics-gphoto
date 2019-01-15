@@ -18,6 +18,9 @@
 
 <script type="text/x-red" data-template-name="photo-account">
 
+	<p> Google username and password:<br>
+	<b>	Please make a new account just for this instead of pasting your google account details into node-red...<br>
+	</b></p>
  <div class="form-row">
      <label for="node-config-input-username"><i class="icon-tag"></i> Username</label>
      <input type="text" id="node-config-input-username">
@@ -67,6 +70,18 @@
 	</div>
 </script>
 
-
+<script type="text/x-red" data-help-name="upload-photo">
+	<p>
+		<br> <b> fileName: </b> name of the image on the filesystem 
+		<br> <b> albumName: </b> gphotos to insert the image into 
+		<br><br> 
+		Also takes an object with the following properties: <br>
+		<b> msg.payload </b> fileName <br>
+		<b> OR  </b> <br>
+		<b> msg.payload.fileName </b> and <b> msg.payload.albumName </b> 
+		<br>
+		Missing properties are filled in by the node-settings, if missing name or album nothing will be uploaded
+	</p>
+</script>
 
 
