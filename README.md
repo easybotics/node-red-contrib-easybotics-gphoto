@@ -14,13 +14,7 @@ sudo npm i node-red-contrib-easybotics-gphoto-upload
 sudo npm i axios@^0.16.2
 ```
 
-```
-    Please create a new dedicated google account just for node-red, instead of pasting your login details into random nodes you downloaded online...
+# Please create a new dedicated google account just for node-red, instead of pasting your login details into random nodes you downloaded online...
     
-    Turn on "Allowing less secure apps to access your account"
-        https://support.google.com/accounts/answer/6010255
-    (Optional) Login Google via browser if you haven't login from current IP address.
-        I recommend to login via VNC using fcwu/docker-ubuntu-vnc-desktop.
-        Other way: using apenwarr/sshuttle
-```
+Turn on "Allowing less secure apps to access your account": https://support.google.com/accounts/answer/6010255
 
