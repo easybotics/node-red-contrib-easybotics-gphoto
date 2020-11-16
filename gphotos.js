@@ -65,7 +65,7 @@ module.exports = function (RED)
 			if(upName && upAlbum)
 			{
 				node.log("uploading: " + upName + "to album: " + upAlbum);
-				upload(upName, upAlbum);
+				upload(upName, upAlbum).then(function() {node.send(msg);});
 			}
 		});
 	}
