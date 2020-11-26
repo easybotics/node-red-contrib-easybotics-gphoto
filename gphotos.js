@@ -29,14 +29,15 @@ module.exports = function(RED) {
         await photoAccount.account.login();
       }
 
-      if (image !== undefined) {
-        const photo = await photoAccount.account.upload(fileName);
+      let photo;
+      if (image === undefined) {
+        photo = await photoAccount.account.upload(fileName);
       } else {
-        const photo = await photoAccount.account.uploadFromStream(streamifier.createReadStream(image), image.length, fileName);
+        photo = await photoAccount.account.uploadFromStream(streamifier.createReadStream(image), image.length, fileName);
       }
       const album = await photoAccount.account.searchOrCreateAlbum(albumName);
 
-      await album.addPhoto(photo);
+      const id = await album.addPhoto(photo);
     }
 
     node.on('input', function(msg) {
