@@ -1,80 +1,84 @@
 const gphoto = require('upload-gphotos').default;
 const fs = require('fs');
 
-module.exports = function (RED)
-{
-	function PhotoAccount (config)
-	{
-		RED.nodes.createNode(this, config);
-		const node = this;
+module.exports = function(RED) {
+  function PhotoAccount(config) {
+    RED.nodes.createNode(this, config);
+    const node = this;
 
-			
-		node.loginAttempt = false;
-		node.account = new gphoto({ username: node.credentials.username, password: node.credentials.password});
-	}
 
-	function UploadPhoto (config)
-	{
-		RED.nodes.createNode(this, config);
-		const node = this; 
+    node.loginAttempt = false;
+    node.account = new gphoto({
+      username: node.credentials.username,
+      password: node.credentials.password
+    });
+  }
 
-		const fileName		= config.fileName;
-		const albumName		= config.albumName;
-		const photoAccount	= RED.nodes.getNode(config.account);
+  function UploadPhoto(config) {
+    RED.nodes.createNode(this, config);
+    const node = this;
 
-		async function upload (fileName, albumName)
-		{
-			if(!photoAccount.account.userId && !photoAccount.loginAttempt)
-			{
-				photoAccount.loginAttempt = true;
-				await photoAccount.account.login();
-			}
+    const fileName = config.fileName;
+    const albumName = config.albumName;
+    const photoAccount = RED.nodes.getNode(config.account);
 
-			const photo = await photoAccount.account.upload(fileName);
-			const album = await photoAccount.account.searchOrCreateAlbum(albumName);
+    async function upload(fileName, albumName, image) {
+      if (!photoAccount.account.userId && !photoAccount.loginAttempt) {
+        photoAccount.loginAttempt = true;
+        await photoAccount.account.login();
+      }
 
-			await album.addPhoto(photo);
-		}
+      if (image !== undefined) {
+        const photo = await photoAccount.account.upload(fileName);
+      } else {
+        const photo = await photoAccount.account.uploadFromStream(streamifier.createReadStream(image), image.length, fileName);
+      }
+      const album = await photoAccount.account.searchOrCreateAlbum(albumName);
 
-		node.on('input', function(msg)
-		{
-			upName  = undefined; 
-			upAlbum = undefined;
+      await album.addPhoto(photo);
+    }
 
-			if( typeof msg.payload === "string")
-			{
-				upName = msg.payload;
-			}
+    node.on('input', function(msg) {
+      upName = undefined;
+      upAlbum = undefined;
 
-			if( msg.payload.fileName)
-			{
-				upName = msg.payload.fileName;
-			}
+      if (typeof msg.payload === "string") {
+        upName = msg.payload;
+      }
 
-			if( msg.payload.album)
-			{
-				upAlbum = msg.payload.album;
-			}
+      if (msg.payload.fileName) {
+        upName = msg.payload.fileName;
+      }
 
-			if(!upName) upName = fileName;
-			if(!upAlbum) upAlbum = albumName;
+      if (msg.payload.album) {
+        upAlbum = msg.payload.album;
+      }
 
-			node.log(upName);
-			node.log(upAlbum);
+      if (!upName) upName = fileName;
 
-			if(upName && upAlbum)
-			{
-				node.log("uploading: " + upName + "to album: " + upAlbum);
-				upload(upName, upAlbum).then(function() {node.send(msg);});
-			}
-		});
-	}
+      if (!upAlbum) upAlbum = albumName;
 
-	RED.nodes.registerType("photo-account", PhotoAccount, {
-		credentials: {
-			username: {type: "text"}, 
-			password: {type: "password"}
-			}
-		});
-	RED.nodes.registerType("upload-photo", UploadPhoto);
+      node.log(upName);
+      node.log(upAlbum);
+
+      if (upName && upAlbum) {
+        node.log("uploading: " + upName + "to album: " + upAlbum);
+        upload(upName, upAlbum, msg.payload.image).then(function() {
+          node.send(msg);
+        });
+      }
+    });
+  }
+
+  RED.nodes.registerType("photo-account", PhotoAccount, {
+    credentials: {
+      username: {
+        type: "text"
+      },
+      password: {
+        type: "password"
+      }
+    }
+  });
+  RED.nodes.registerType("upload-photo", UploadPhoto);
 }
