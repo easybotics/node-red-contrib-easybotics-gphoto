@@ -1,5 +1,6 @@
 const gphoto = require('upload-gphotos').default;
 const fs = require('fs');
+var streamifier = require('./lib/streamifier.js');
 
 module.exports = function(RED) {
   function PhotoAccount(config) {
