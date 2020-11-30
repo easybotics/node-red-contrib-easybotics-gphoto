@@ -65,7 +65,7 @@
 	</div>
 
 	<div class="form-row">
-		<label for="node-input-album"><i class='fa fa-tag'></i> Album </label>
+		<label for="node-input-albumName"><i class='fa fa-tag'></i> Album </label>
 		<input type='text' id='node-input-albumName'/>
 	</div>
 </script>
@@ -78,11 +78,11 @@
 		Also takes an object with the following properties: <br>
 		<b> msg.payload </b> fileName <br>
 		<b> OR  </b> <br>
-		<b> msg.payload.fileName </b> and <b> msg.payload.albumName </b>
+		<b> msg.payload.fileName </b> and <b> msg.payload.albumName </b><br>
 		<b> OR  </b> <br>
-		<b> msg.payload.image </b> and <b> msg.payload.fileName </b> and <b> msg.payload.albumName </b>
+		<b> msg.payload.image </b> and <b> msg.payload.fileName </b> and <b> msg.payload.albumName </b><br>
 		Where image is an image in Buffer data type.  fileName will be attached to the uploaded image.
-		<br>
+		<br><br>
 		Missing properties are filled in by the node-settings, if missing name or album nothing will be uploaded
 	</p>
 </script>

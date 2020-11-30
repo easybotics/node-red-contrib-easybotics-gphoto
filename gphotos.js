@@ -23,21 +23,27 @@ module.exports = function(RED) {
     const albumName = config.albumName;
     const photoAccount = RED.nodes.getNode(config.account);
 
-    async function upload(fileName, albumName, image) {
+    async function upload(fileName, albumName, payload) {
       if (!photoAccount.account.userId && !photoAccount.loginAttempt) {
         photoAccount.loginAttempt = true;
         await photoAccount.account.login();
       }
 
       let photo;
-      if (image === undefined) {
+      if (payload.image === undefined) {
         photo = await photoAccount.account.upload(fileName);
       } else {
-        photo = await photoAccount.account.uploadFromStream(streamifier.createReadStream(image), image.length, fileName);
+        photo = await photoAccount.account.uploadFromStream(streamifier.createReadStream(payload.image), payload.image.length, fileName);
       }
       const album = await photoAccount.account.searchOrCreateAlbum(albumName);
 
       const id = await album.addPhoto(photo);
+      if (payload.description) {
+        await photo.modifyDescription(payload.description);
+      }
+      if (payload.timestamp) {
+        await photo.modifyCreatedDate(payload.timestamp);
+      }
     }
 
     node.on('input', function(msg) {
@@ -52,21 +58,38 @@ module.exports = function(RED) {
         upName = msg.payload.fileName;
       }
 
-      if (msg.payload.album) {
-        upAlbum = msg.payload.album;
+      if (msg.payload.albumName) {
+        upAlbum = msg.payload.albumName;
       }
 
       if (!upName) upName = fileName;
 
       if (!upAlbum) upAlbum = albumName;
 
-      node.log(upName);
-      node.log(upAlbum);
+      // node.log("fileName", upName);
+      // node.log("album", upAlbum);
 
       if (upName && upAlbum) {
+        node.status({
+          text: 'uploading: ' + upName,
+          shape: 'dot',
+          fill: 'green'
+        });
         node.log("uploading: " + upName + "to album: " + upAlbum);
-        upload(upName, upAlbum, msg.payload.image).then(function() {
+        upload(upName, upAlbum, msg.payload).then(function() {
           node.send(msg);
+          node.status({
+            text: 'uploaded: ' + upName,
+            shape: 'ring',
+            fill: 'green'
+          });
+        });
+      } else {
+        node.warn('Not uploading, missing filename or album name.');
+        node.status({
+          text: 'Not uploading, missing filename or album name.',
+          shape: 'dot',
+          fill: 'yellow'
         });
       }
     });
