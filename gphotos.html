@@ -1,12 +1,12 @@
 <script type="text/javascript">
-	RED.nodes.registerType('photo-account', 
+	RED.nodes.registerType('photo-account',
 			{
-				category: 'config', 
+				category: 'config',
 				defaults:
 				{
 					name: {value:""}
-				}, 
-				credentials: 
+				},
+				credentials:
 				{
 					username: {type:"text"},
 					password: {type:"password"}
@@ -33,19 +33,19 @@
 </script>
 
 <script type="text/javascript">
-	RED.nodes.registerType('upload-photo', 
+	RED.nodes.registerType('upload-photo',
 	{
-		category: 'Google Photos', 
+		category: 'Google Photos',
 		defaults:
 		{
-			name: {value:""}, 
+			name: {value:""},
 			fileName: {value:""},
 			albumName: {value:""},
 			account: {type:'photo-account', required:true},
 		},
-		inputs: 1, 
-		outputs: 1, 
-		icon: "arrow-in.png", 
+		inputs: 1,
+		outputs: 1,
+		icon: "arrow-in.png",
 		label: function()
 		{
 			return this,name || "Upload Photo";
@@ -65,23 +65,24 @@
 	</div>
 
 	<div class="form-row">
-		<label for="node-input-album"><i class='fa fa-tag'></i> Album </label>
+		<label for="node-input-albumName"><i class='fa fa-tag'></i> Album </label>
 		<input type='text' id='node-input-albumName'/>
 	</div>
 </script>
 
 <script type="text/x-red" data-help-name="upload-photo">
 	<p>
-		<br> <b> fileName: </b> name of the image on the filesystem 
-		<br> <b> albumName: </b> gphotos to insert the image into 
-		<br><br> 
+		<br> <b> fileName: </b> name of the image on the filesystem
+		<br> <b> albumName: </b> gphotos to insert the image into
+		<br><br>
 		Also takes an object with the following properties: <br>
 		<b> msg.payload </b> fileName <br>
 		<b> OR  </b> <br>
-		<b> msg.payload.fileName </b> and <b> msg.payload.albumName </b> 
-		<br>
+		<b> msg.payload.fileName </b> and <b> msg.payload.albumName </b><br>
+		<b> OR  </b> <br>
+		<b> msg.payload.image </b> and <b> msg.payload.fileName </b> and <b> msg.payload.albumName </b><br>
+		Where image is an image in Buffer data type.  fileName will be attached to the uploaded image.
+		<br><br>
 		Missing properties are filled in by the node-settings, if missing name or album nothing will be uploaded
 	</p>
 </script>
-
-
