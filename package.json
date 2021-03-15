@@ -14,8 +14,8 @@
   "node-red"
  ],
  "dependencies": {
-  "upload-gphotos": "3.0.5",
-  "axios": ">=0.16.2"
+  "axios": ">=0.16.2",
+  "upload-gphotos": "^4.2.2"
  },
  "homepage": "https://github.com/easybotics/node-red-contrib-easybotics-gphoto",
  "bugs": "https://github.com/easybotics/node-red-contrib-easybotics-gphoto/issues",
